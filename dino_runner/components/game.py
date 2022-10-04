@@ -2,7 +2,6 @@ import pygame
 
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
-
 class Game:
     def __init__(self):
         pygame.init()
