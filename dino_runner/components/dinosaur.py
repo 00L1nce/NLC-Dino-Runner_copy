@@ -3,6 +3,7 @@ import pygame
 
 from pickle import FALSE, TRUE
 from dino_runner.utils.constants import RUNNING 
+from dino_runner.utils.constants import DUCKING
 from dino_runner.utils.constants import JUMPING 
 from pygame.sprite import Sprite
 
@@ -27,7 +28,7 @@ class Dinosaur(Sprite):
         elif self.dino_jump:
             self.jump()
         
-        if user_input(pygame.K_UP) and not self.dino_jump:
+        if user_input[pygame.K_UP] and not self.dino_jump:
             self.dino_jump = True
             self.dino_run = False
         elif not self.dino_jump:
@@ -41,15 +42,16 @@ class Dinosaur(Sprite):
     def jump(self):
         self.image = JUMPING
         if self.dino_jump:
-            self.dino_rect.y -= self.jump_vel *4
+            self.dino_rect.y -= self.jump_vel * 4
             print(self.dino_rect.y)
             self.jump_vel -= 0.8
             print(self.jump_vel)
 
-        if self.jump < -self.JUMP_VEL:
+        if self.jump_vel < -self.JUMP_VEL:
             self.dino_rect.y = self.Y_POS
             self.dino_rect = False
             self.jump_vel = self.JUMP_VEL
+
 #tarea. hacer que se agache
 
 
