@@ -52,9 +52,9 @@ class Dinosaur(Sprite):
         self.image = JUMPING
         if self.dino_jump:
             self.dino_rect.y -= self.jump_vel * 4
-            print(self.dino_rect.y)
+            #print(self.dino_rect.y)
             self.jump_vel -= 0.8
-            print(self.jump_vel)
+            #print(self.jump_vel)
 
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_rect.y = self.Y_POS
