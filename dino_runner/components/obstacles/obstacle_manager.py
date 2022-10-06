@@ -1,22 +1,27 @@
 from ast import Break
+import random
 import pygame
 
 from dino_runner.components.obstacles.cactus import Cactus
-from dino_runner.utils.constants import SMALL_CACTUS
+from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS
 class ObstacleManager:
     def __init__(self):
-        self.obstacle = []
+        self.obstacles = []
 
     def update(self, game):
-        if len(self.obstacle) == 0:
-            small_cactus = Cactus(SMALL_CACTUS)
-            self.obstacle.append(small_cactus)
+        if len(self.obstacles) == 0:
+            if random.randint(0, 2) == 0:
+                small_cactus = Cactus(SMALL_CACTUS)
+                self.obstacles.append(small_cactus)
+            elif random.randint(0, 2) == 0:
+                large_cactus = Cactus(LARGE_CACTUS)
+                self.obstacles.append(large_cactus)            
 
 #tarea: imlementar cactus grandes
-        for obstacle in self.obstacle:
+        for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacle)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(500)
+                pygame.time.delay(5000)
                 game.playing = False
                 game.death_count += 1
                 #cosa para cuando pierda
