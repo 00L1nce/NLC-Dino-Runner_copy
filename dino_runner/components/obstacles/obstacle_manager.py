@@ -15,17 +15,20 @@ class ObstacleManager:
                 self.obstacles.append(small_cactus)
             elif random.randint(0, 2) == 0:
                 large_cactus = Cactus(LARGE_CACTUS)
-                self.obstacles.append(large_cactus)            
+                self.obstacles.append(large_cactus) 
 
-#tarea: imlementar cactus grandes
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacle)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(5000)
-                game.playing = False
-                game.death_count += 1
-                #cosa para cuando pierda
-                Break
+                if not game.player.shield:
+                    pygame.time.delay(500)
+                    game.playing = False
+                    game.death_count += 1
+                    break
+                    #cosa para cuando pierda
+                else:
+                    self.obstacles.remove(obstacle)
+            #Break
 
     def draw(self, screen):
         for obstacle in self.obstacles:
