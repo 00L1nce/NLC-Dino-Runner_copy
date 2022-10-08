@@ -1,19 +1,21 @@
+from asyncio import shield
 import pygame
 
 
 from pickle import FALSE, TRUE
-from dino_runner.utils.constants import RUNNING, RUNNING_SHIELD, DEFAULT_TYPE
-from dino_runner.utils.constants import DUCKING, DUCKING_SHIELD, SHIELD_TYPE
-from dino_runner.utils.constants import JUMPING, JUMPING_SHIELD
+from dino_runner.utils.constants import HAMMER_TYPE, SHIELD_TYPE, DEFAULT_TYPE
+from dino_runner.utils.constants import RUNNING, RUNNING_SHIELD, RUNNING_HAMMER
+from dino_runner.utils.constants import DUCKING, DUCKING_SHIELD, DUCKING_HAMMER
+from dino_runner.utils.constants import JUMPING, JUMPING_SHIELD, JUMPING_HAMMER
 from pygame.sprite import Sprite
 
-DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
-JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
-RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
 
 
 class Dinosaur(Sprite):
-    X_POS = 120
+    X_POS = 150
     Y_POS = 310
     JUMP_VEL = 8.5
 
@@ -28,6 +30,7 @@ class Dinosaur(Sprite):
         self.dino_jump = False
         self.dino_duck = False
         self.jump_vel = self.JUMP_VEL
+        self.time_to_show = 0
         self.setup_state()
 
     def setup_state(self):
@@ -79,7 +82,6 @@ class Dinosaur(Sprite):
         self.dino_rect.y = (self.Y_POS + 40)
         self.step_index += 1
 
-
     def run(self):
         self.image = RUN_IMG[self.type][self.step_index // 5]
         self.dino_rect = self.image.get_rect()
@@ -90,5 +92,12 @@ class Dinosaur(Sprite):
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
-    def check_invicibility(self):
-        pass
+    def check_invicibility(self, screen):
+        if self.shield == True:
+            self.time_to_show = round((self.shield_time_up - pygame.time.get_ticks()) / 100, 2)
+            if self.time_to_show >= 0 and self.show_text:
+                #mostrar este tiempo en el juego
+                print(self.time_to_show)
+            else:
+                self.shield = False
+                self.type = DEFAULT_TYPE
