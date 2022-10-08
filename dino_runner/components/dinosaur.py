@@ -1,3 +1,4 @@
+from pygame import mixer
 from asyncio import shield
 import pygame
 
@@ -32,7 +33,9 @@ class Dinosaur(Sprite):
         self.jump_vel = self.JUMP_VEL
         self.time_to_show = 0
         self.setup_state()
-
+        mixer.init()
+        self.jump_sound = pygame.mixer.Sound('jump.ogg')        
+            
     def setup_state(self):
         self.has_power_up = False
         self.shield = False
@@ -52,11 +55,16 @@ class Dinosaur(Sprite):
             self.step_index = 0
 
         if user_input[pygame.K_UP] and not self.dino_jump:
+            self.jump_sound.play()
             self.dino_jump = True
             self.dino_run = False
             self.dino_duck = False
         elif user_input[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
+            self.dino_jump = False
+            self.dino_run = False
+        elif user_input[pygame.K_SPACE] and not self.dino_jump:
+            self.dino_duck = False
             self.dino_jump = False
             self.dino_run = False
         elif not self.dino_jump:

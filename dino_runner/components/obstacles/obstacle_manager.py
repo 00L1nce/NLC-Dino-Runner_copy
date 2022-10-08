@@ -1,5 +1,8 @@
+from operator import truediv
+from pygame import mixer
 from ast import Break
 import random
+
 import pygame
 
 from dino_runner.components.obstacles.cactus import Cactus
@@ -9,6 +12,8 @@ from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD
 class ObstacleManager:
     def __init__(self):
         self.obstacles = []
+        mixer.init()
+        self.dead_sound = pygame.mixer.Sound('douh.ogg') 
 
     def update(self, game):
         if len(self.obstacles) == 0:
@@ -30,13 +35,18 @@ class ObstacleManager:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
                 if not game.player.shield:
-                    pygame.time.delay(500)
+                    self.dead_sound.play()
+                    pygame.time.delay(1000)
                     game.playing = False
                     game.death_count += 1
-                    #cosa para cuando pierda
+                    #pygame.time.delay(5000)
                 else:
                     self.obstacles.remove(obstacle)
+            
             Break
+            #pygame.time.delay(5000)
+            #self.dead_sound.stop()
+
 
     def draw(self, screen):
         for obstacle in self.obstacles:

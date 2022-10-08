@@ -34,15 +34,17 @@ class Game:
 
         self.points = 0
         self.death_count = 0
-        #self.play = PLAY
-        #self.SOUND = pygame.mixer.Sound("")
+        self.dead_sound = ObstacleManager()
+
+        mixer.init()
+        self.Music = "soundtrack.ogg"
         
     def execute(self):
         self.running = True
-        self.Music = "soundtrack.ogg"
-        mixer.init()
+              
         pygame.mixer.music.load(self.Music)
         pygame.mixer.music.play(-1)
+         
         while self.running:
             if not self.playing:
                 self.show_menu()
@@ -52,7 +54,7 @@ class Game:
 
     def run(self):
         # Game loop: events - update - draw
-        
+        mixer.music.set_volume(1.0)
         self.obstacle_manager.reset_obstacles()
         self.power_up_manager.reset_power_ups()
         self.playing = True
@@ -118,7 +120,7 @@ class Game:
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 self.run()
-                
+                                
     def show_menu(self):
         self.screen.fill((255, 255, 255))
         half_screen_height = SCREEN_HEIGHT // 2
@@ -131,6 +133,7 @@ class Game:
             text_rect.center = (half_screen_width, half_screen_height)
             self.screen.blit(text, text_rect)
         elif self.death_count > 0:
+            mixer.music.set_volume(0.0) 
             font = pygame.font.Font(FONT_STYLE,70)
             text = font.render("\ \ \__GAME OVER___/ / /", True, (100,50,25))
             text_rect = text.get_rect()
@@ -159,7 +162,7 @@ class Game:
             self.screen.blit(text, text_rect)
 
             #INTENTAR DE NUEVO         False, (0,0,250)
-            font = pygame.font.SysFont('Troika',35,True,True)
+            font = pygame.font.SysFont('Troika',35)
             text = font.render(" _*_*_*_*_PRESS ANY KEY FOR TRY AGAIN_*_*_*_*_ ", True, (0,0,250) )
             text_rect = text.get_rect()
             text_rect.center = (half_screen_width, half_screen_height+170)
@@ -170,3 +173,4 @@ class Game:
 
         pygame.display.update()
         self.handle_key_events_on_menu()
+       

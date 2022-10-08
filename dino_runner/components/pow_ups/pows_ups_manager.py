@@ -1,4 +1,5 @@
 import random
+from pygame import mixer
 import pygame
 
 from dino_runner.utils.constants import SCREEN_HEIGHT, SCREEN_WIDTH
@@ -14,6 +15,8 @@ class PowerUpManager:
         self.half_screen_height = SCREEN_HEIGHT // 2
         self.half_screen_width = SCREEN_WIDTH // 2
         self.ext_points = 0
+        mixer.init()
+        self.chad_sound = pygame.mixer.Sound('chad.ogg') 
 
     def generate_power_ups(self, points):
         if len(self.power_ups) >= 0:
@@ -33,11 +36,12 @@ class PowerUpManager:
             power_up.update(game_speed, self.power_ups)
             #pow_sel = random.randint(0, 2)
             if player.dino_rect.colliderect(power_up.rect):
+                self.chad_sound.play()
                 power_up.start_time = pygame.time.get_ticks()
                 player.shield = True
                 player.show_text = True
                 player.type = power_up.type
-                time_random = random.randint(5, 10)
+                time_random = 10
                 player.shield_time_up = power_up.start_time + (time_random * 1000)
                 
                 self.power_ups.remove(power_up)
